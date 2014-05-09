@@ -1,3 +1,6 @@
+This branch is under developement. Your help is welcome!
+
+====================
 EasyNDK-for-cocos2dx (By TheArsenik)
 ====================
 
