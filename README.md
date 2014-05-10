@@ -11,10 +11,10 @@ This framework allow you to call a single function in your C++ instead of writin
 ## How it works?
 Every call is encoded by EasyNDK's Helper in a json message that is transmitted to the native part of EasyNDK. The native part of EasyNDK is using reflection mecanism to find the proper method. You can pass parameters to your methods so you are able to communicate without limitation.
 
-** Warning: ** The way this framework is working should warn you that it is made to be used with sparingly (encoding/decoding into/from JSON and reflection mecanism are a bit costly in time). I recommend you not to use this framework if you want to call native code every frame of your Cocos2d-X app. Otherwise you can use it.
+**Warning:** The way this framework is working should warn you that it is made to be used with sparingly (encoding/decoding into/from JSON and reflection mecanism are a bit costly in time). I recommend you not to use this framework if you want to call native code every frame of your Cocos2d-X app. Otherwise you can use it.
 
 ## Setup your project
-***TODO***
+**_TODO_**
 
 ## Calling a native function / method from C++ code
 Calling a native method is very simple: just call *SendMessage* function from your C++ code.
