@@ -44,10 +44,10 @@ I use this platform only to develop the cross-platform part my Cocos2d-X games. 
 
 # Improvements of EasyNDK-for-cocos2dx (By TheArsenik)
 
-I started to modify this framework because I was wondering EasyNDK was working Cocos2d-x nodes instead of objects (of course "CCObject" because it simplifies memory management regarding C++ mecanisms).
+I started to modify this framework because I was wondering EasyNDK was working Cocos2d-x nodes instead of objects (of course "cocos2d::Ref" because it simplifies memory management regarding C++ mecanisms).
 
-I improved the original project and I'm planning to adapt it to Cocos2d-X 3 (you can see a branch which is under developement).
+I improved the original project and I'm planning to adapt it to Cocos2d-X 3 (as you can see this branch is under developement).
 
-I'm also planning to adapt EasyNDK for Windows Phone 8 which is the 3rd popular mobile platform and Win32 MOCs to let us develop under Windows without modifications.
+I'm also planning to adapt EasyNDK for Windows Phone 8 which is the 3rd popular mobile platform and Win32 Mocks to let us develop under Windows without modifications.
 
 I will explain more my thoughts when this project will be refactored to Cocos2d-X 3 but keep this project starred!
