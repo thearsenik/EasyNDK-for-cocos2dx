@@ -25,19 +25,63 @@ Every call is encoded by EasyNDK's Helper in a JSON message that is transmitted 
 
 ## iOS SDK / XCode
 ### Setup your project
-**_TODO_**
+Once you generated a project with Cocos2d-X tools, open your XCode project.
+In XCode click on Files > Add file in <your project>. Select libEasyNDK.xcodeproj located in EasyNDK/proj.ios.
+You also need to define a delegate that will handle your C++ calls. Usually the RootViewController is a good choice to do this job but you can create an other class to do it. Here is the code to define the delegate:
+```Objective-C
+[IOSNDKHelper SetNDKReciever:self];
+```
 
 ### In your Objective-C code
-**_TODO_**
+When you call a method from C++, EasyNDK searches for it in the delegate class. The method must have the following prototype:
+```Objective-C
+-(void) foo:(NSObject*)param;
+```
+
+To call a method from Objective-C to C++ (for instance when you callback your code after a job) you simply call IOSNDKHelper like that:
+```Objective-C
+[IOSNDKHelper SendMessage:CPPFunctionToBeCalled WithParameters:nil];
+```
 
 ## Win32 / Visual Studio 2012
 I use this platform only to develop the cross-platform part my Cocos2d-X games. Since you use EasyNDK in your projects, you will need to mock the calls to simulate the native environment.
 
 ### Setup your project
-**_TODO_**
+Open your solution in Visual Studio (I'm using Visual Studio 2012). You need to add jansson then libEasyNDK. Do the following steps:
+1. Right click on your solution > Add... > Existing project.
+2. Select jansson.vcxproj located in EasyNDK/proj.win32/jansson-2.5/win32/vs2010/.
+3. Right click on your solution > Add... > Existing project.
+4. Select libEasyNDK.vcxproj located in EasyNDK/proj.win32/
+
+Don't forget to tell Visual Studio you depend on EasyNDK project and to add jansson and EasyNDK folders to include paths by:
+1. Right click on the solution > properties
+2. In the left tree view select Common properties > Framework and References
+3. Click on the "Add References" button
+4. Check libEasyNDK project
+5. Then click, in the tree view, on Project Properties > C/C++
+6. In the "Additionnal Includes" input, add this: "EasyNDK"
+
+Here it is! You should be able to compile & run your project. The only problem is when you call a method and you are waiting for a callback it will never happen because there is no different language and no native functionnality you could invoke.
+To simulate a native call you can create mocks.
 
 ### Creating mocks
-**_TODO_**
+In your project you should have a main.cpp file that starts Cocos2d-X.
+Before:
+```C++
+// create the application instance
+AppDelegate app;
+return Application::getInstance()->run();
+```
+add your mocks:
+```C++
+NDKHelper::getInstance()->addMock("myMethod", [](Ref *params) {
+  cocos2d::Map<std::string, cocos2d::Ref *> parameters;
+  parameters.insert("foo", cocos2d::String("bar"));
+  parameters.insert("number", cocos2d::String("2"));
+  NDKHelper::getInstance()->callSelector("myMethodCallback", parameters);
+});
+```
+You can also encapsulate your mocks in a seperate class but don't forget to call your code before cocos2d-X.
 
 ## Windows Phone 8 / Visual Studio 2012 with Windows Phone 8 SDK
 **_TODO_**
