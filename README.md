@@ -86,12 +86,13 @@ You can also encapsulate your mocks in a seperate class but don't forget to call
 ## Windows Phone 8 / Visual Studio 2012 with Windows Phone 8 SDK
 **_TODO_**
 
-# Improvements of EasyNDK-for-cocos2dx (By TheArsenik)
+# My improvements
 
 I started to modify this framework because I was wondering EasyNDK was working Cocos2d-x nodes instead of objects (of course "cocos2d::Ref" because it simplifies memory management regarding C++ mecanisms).
 
 I improved the original project and I'm planning to adapt it to Cocos2d-X 3 (as you can see this branch is under developement).
 
 I'm also planning to adapt EasyNDK for Windows Phone 8 which is the 3rd popular mobile platform and Win32 Mocks to let us develop under Windows without modifications.
+I also want to rewrite the existing code to fit with C++ conventions.
 
 I will explain more my thoughts when this project will be refactored to Cocos2d-X 3 but keep this project starred!
