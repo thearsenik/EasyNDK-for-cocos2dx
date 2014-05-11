@@ -6,7 +6,7 @@ This branch is under developement. Your help is welcome!
 This repository is a fork of the original project initiated by [aajiwani](https://github.com/aajiwani/EasyNDK-for-cocos2dx).
 
 EasyNDK is a framework that simplifies the work of communicating between C++ code and platform's native language in Cocos2d-X. For example if you work on Android, you will have to call JNI functions which is a bit complicated.
-This framework allow you to call a single function in your C++ instead of writing code for every platform.
+This framework allows you to call a single function in C++ instead of writing code for every platform.
 
 ## How it works?
 Every call is encoded by EasyNDK's Helper in a JSON message that is transmitted to the native part of EasyNDK. The native part of EasyNDK is using reflection mecanism to find the proper method. You can pass parameters to your methods so you are able to communicate without limitation.
@@ -58,8 +58,8 @@ Don't forget to tell Visual Studio you depend on EasyNDK project and to add jans
 2. In the left tree view select Common properties > Framework and References
 3. Click on the "Add References" button
 4. Check libEasyNDK project
-5. Then click, in the tree view, on Project Properties > C/C++
-6. In the "Additionnal Includes" input, add this: "EasyNDK"
+5. Then click, in the tree view, on Configuration Properties > C/C++
+6. In the "Additionnal Include Directories" input, add this: "<path_to_easyndk>\Classes\NDKHelper\"
 
 Here it is! You should be able to compile & run your project. The only problem is when you call a method and you are waiting for a callback it will never happen because there is no different language and no native functionnality you could invoke.
 To simulate a native call you can create mocks.
