@@ -48,9 +48,9 @@ I use this platform only to develop the cross-platform part my Cocos2d-X games. 
 
 ### Setup your project
 Open your solution in Visual Studio (I'm using Visual Studio 2012). You need to add jansson then libEasyNDK. Do the following steps:
-1. Right click on your solution > Add... > Existing project.
-2. Select jansson.vcxproj located in EasyNDK/proj.win32/jansson-2.5/win32/vs2010/.
-3. Right click on your solution > Add... > Existing project.
+1. Right click on your solution > Add... > Existing project
+2. Select jansson.vcxproj located in EasyNDK/proj.win32/jansson-2.5/win32/vs2010/
+3. Right click on your solution > Add... > Existing project
 4. Select libEasyNDK.vcxproj located in EasyNDK/proj.win32/
 
 Don't forget to tell Visual Studio you depend on EasyNDK project and to add jansson and EasyNDK folders to include paths by:
