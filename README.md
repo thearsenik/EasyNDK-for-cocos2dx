@@ -62,8 +62,8 @@ Don't forget to tell Visual Studio you depend on EasyNDK project and to add jans
 4. Check libEasyNDK project
 5. Then click, in the tree view, on Configuration Properties > C/C++
 6. In the "Additionnal Include Directories" input, add these entries:
-  * "<path_to_easyndk>\Classes\NDKHelper\"
-  * "<path_to_easyndk>\proj.win32\jansson-2.5\src"
+  * "PATH_TO_EASYNDK\Classes\NDKHelper\"
+  * "PATH_TO_EASYNDK\proj.win32\jansson-2.5\src"
 
 Here it is! You should be able to compile & run your project. The only problem is when you call a method and you are waiting for a callback it will never happen because there is no different language and no native functionnality you could invoke.
 To simulate a native call you can create mocks.
