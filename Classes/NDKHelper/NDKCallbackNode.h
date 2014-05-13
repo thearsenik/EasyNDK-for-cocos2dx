@@ -27,15 +27,17 @@ private :
 	Ref *_target;
 	SEL_EasyNDKFunc _selector;
 	std::function<void(Ref*)> _function;
+	bool _cleanupAfterCall;
 
 public :
-	static NDKCallbackNode* create(const string &groupName, const string &name, Ref *target, SEL_EasyNDKFunc sel);
-	static NDKCallbackNode* create(const string &groupName, const string &name, const std::function<void (Ref *)> &func);
-	virtual bool init(const string &groupName, const string &name, Ref *target, SEL_EasyNDKFunc sel);
-	virtual bool init(const string &groupName, const string &name, const std::function<void (Ref *)> &func);
+	static NDKCallbackNode* create(const string &groupName, const string &name, Ref *target, SEL_EasyNDKFunc sel, bool cleanupAfterCall);
+	static NDKCallbackNode* create(const string &groupName, const string &name, const std::function<void (Ref *)> &func, bool cleanupAfterCall);
+	virtual bool init(const string &groupName, const string &name, Ref *target, SEL_EasyNDKFunc sel, bool cleanupAfterCall);
+	virtual bool init(const string &groupName, const string &name, const std::function<void (Ref *)> &func, bool cleanupAfterCall);
 	virtual ~NDKCallbackNode();
 	string getName();
 	string getGroup();
+	bool shouldCleanupAfterCall();
 	void executeCallfunc(Ref *param);
 };
 

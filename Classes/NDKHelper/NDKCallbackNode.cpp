@@ -11,10 +11,10 @@
 
 namespace easyndk {
 
-NDKCallbackNode* NDKCallbackNode::create( const string &groupName, const string &name, Ref *target, SEL_EasyNDKFunc sel )
+NDKCallbackNode* NDKCallbackNode::create( const string &groupName, const string &name, Ref *target, SEL_EasyNDKFunc sel, bool cleanupAfterCall )
 {
 	auto ret = new NDKCallbackNode();
-	if (ret && ret->init(groupName, name, target, sel) ) {
+	if (ret && ret->init(groupName, name, target, sel, cleanupAfterCall) ) {
 		ret->autorelease();
 		return ret;
 	}
@@ -22,10 +22,10 @@ NDKCallbackNode* NDKCallbackNode::create( const string &groupName, const string 
 	return nullptr;
 }
 
-NDKCallbackNode* NDKCallbackNode::create( const string &groupName, const string &name, const std::function<void (Ref *)> &func )
+NDKCallbackNode* NDKCallbackNode::create( const string &groupName, const string &name, const std::function<void (Ref *)> &func, bool cleanupAfterCall )
 {
 	auto ret = new NDKCallbackNode();
-	if (ret && ret->init(groupName, name, func) ) {
+	if (ret && ret->init(groupName, name, func, cleanupAfterCall) ) {
 		ret->autorelease();
 		return ret;
 	}
@@ -33,7 +33,7 @@ NDKCallbackNode* NDKCallbackNode::create( const string &groupName, const string 
 	return nullptr;
 }
 
-bool NDKCallbackNode::init( const string &groupName, const string &name, Ref *target, SEL_EasyNDKFunc sel )
+bool NDKCallbackNode::init( const string &groupName, const string &name, Ref *target, SEL_EasyNDKFunc sel, bool cleanupAfterCall )
 {
 	CC_SAFE_RETAIN(target);
 	this->_target = target;
@@ -41,11 +41,12 @@ bool NDKCallbackNode::init( const string &groupName, const string &name, Ref *ta
 	this->_function = nullptr;
 	this->_groupName = groupName;
 	this->_name = name;
+	this->_cleanupAfterCall = cleanupAfterCall;
 
 	return true;
 }
 
-bool NDKCallbackNode::init(const string &groupName, const string &name, const std::function<void (Ref *)> &func)
+bool NDKCallbackNode::init(const string &groupName, const string &name, const std::function<void (Ref *)> &func, bool cleanupAfterCall)
 {
 	CC_SAFE_RETAIN(_target);
 	this->_target = nullptr;
@@ -53,6 +54,7 @@ bool NDKCallbackNode::init(const string &groupName, const string &name, const st
 	this->_function = func;
 	this->_groupName = groupName;
 	this->_name = name;
+	this->_cleanupAfterCall = cleanupAfterCall;
 
 	return true;
 }
@@ -80,6 +82,11 @@ void NDKCallbackNode::executeCallfunc(Ref *param)
 	else if (_function) {
 		_function(param);
 	}
+}
+
+bool NDKCallbackNode::shouldCleanupAfterCall()
+{
+	return _cleanupAfterCall;
 }
 
 }

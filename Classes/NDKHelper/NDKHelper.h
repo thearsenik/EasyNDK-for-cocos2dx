@@ -24,32 +24,111 @@ using namespace std;
 
 namespace easyndk {
 
-class NDKHelper : public Ref
-{
-public:
-	static NDKHelper *getInstance();
-	static void destroyInstance();
+	class NDKHelper : public Ref
+	{
+		friend NDKCalledSelector;
+	public:
+		//************************************
+		// Method:    getInstance
+		// FullName:  easyndk::NDKHelper::getInstance
+		// Access:    public static 
+		// Returns:   NDKHelper *
+		// Qualifier: Returns the singleton of this class
+		//************************************
+		static NDKHelper *getInstance();
 
-	static Ref* getRefFromJson(json_t *obj);
-	static json_t* getJsonFromRef(Ref* obj);
+		//************************************
+		// Method:    destroyInstance
+		// FullName:  easyndk::NDKHelper::destroyInstance
+		// Access:    public static 
+		// Returns:   void
+		// Qualifier: Destroys the singleton of this class
+		//************************************
+		static void destroyInstance();
 
-	void addSelector(const string &groupName, const string &name, Ref* target, SEL_EasyNDKFunc selector);
-	void removeSelectorsInGroup(const string &groupName);
-	void printSelectorList();
-	void handleMessage(json_t *methodName, json_t* methodParams);
-	void sendMessageWithParams(const string &methodName, Ref* methodParams);
+		//************************************
+		// Method:    addSelector
+		// FullName:  easyndk::NDKHelper::addSelector
+		// Access:    public 
+		// Returns:   void
+		// Qualifier: Register a method (given by target + selector) to be called if "name" is called by the native environment
+		// Parameter: const string & groupName: An identifier to specify when you want to remove this selector
+		// Parameter: const string & name: The name of the selector that native environment will call
+		// Parameter: Ref * target: the target object to call when "name" is called by the native environment
+		// Parameter: SEL_EasyNDKFunc selector: the selector to call when "name" is called by the native environment
+		// Parameter: bool withCleanup: if true this selector will be automatically removed after a call so it's a single callable selector. Otherwise you will have to remove it your self. Default value is true.
+		//************************************
+		void addSelector(const string &groupName, const string &name, Ref* target, SEL_EasyNDKFunc selector, bool withCleanup = true);
 
-protected:
-	CREATE_FUNC(NDKHelper);
-	virtual bool init();
-	virtual ~NDKHelper();
-	void removeAtIndex(int index);
+		//************************************
+		// Method:    removeSelectorsInGroup
+		// FullName:  easyndk::NDKHelper::removeSelectorsInGroup
+		// Access:    public 
+		// Returns:   void
+		// Qualifier: Remove all selectors from the given group
+		// Parameter: const string & groupName: name of the group to remove
+		//************************************
+		void removeSelectorsInGroup(const string &groupName);
 
-protected:
-	static NDKHelper *_instance;
-	Vector<NDKCallbackNode*> registeredSelectors;
-	Vector<NDKCalledSelector*> calledSelectors;
-};
+		//************************************
+		// Method:    printSelectorList
+		// FullName:  easyndk::NDKHelper::printSelectorList
+		// Access:    public 
+		// Returns:   void
+		// Qualifier: A dummy method that print all selectors in CCLOG's output. This method is only usefull when debuging.
+		//************************************
+		void printSelectorList();
+
+		//************************************
+		// Method:    handleMessage
+		// FullName:  easyndk::NDKHelper::handleMessage
+		// Access:    public 
+		// Returns:   void
+		// Qualifier: Do not call this method! It is called by native environments to call a selector.
+		// Parameter: json_t * methodName
+		// Parameter: json_t * methodParams
+		//************************************
+		void handleMessage(json_t *methodName, json_t* methodParams);
+
+		//************************************
+		// Method:    sendMessage
+		// FullName:  easyndk::NDKHelper::sendMessage
+		// Access:    public 
+		// Returns:   void
+		// Qualifier: Send a message to native environment (use it to call your native code).
+		// Parameter: const string & methodName: the method you want to call
+		// Parameter: Ref * methodParams: (optional) params you want to pass
+		//************************************
+		void sendMessage(const string &methodName, Ref* methodParams = nullptr);
+
+		//************************************
+		// Method:    sendMessageWithCallbackSelector
+		// FullName:  easyndk::NDKHelper::sendMessageWithCallbackSelector
+		// Access:    public 
+		// Returns:   void
+		// Qualifier: Add a single callable selector then send a message to native environment (use it to call your native code that will call back your code once).
+		// Parameter: const string & callbackSelectorName: it corresponds to "addSelector"'s "name" parameter
+		// Parameter: Ref * target: it corresponds to "addSelector"'s "target" parameter
+		// Parameter: SEL_EasyNDKFunc selector: it corresponds to "addSelector"'s "selector" parameter
+		// Parameter: const string & methodName: it corresponds to "sendMessage"'s "methodName" parameter
+		// Parameter: Ref * methodParams: it corresponds to "sendMessage"'s "methodParams" parameter
+		//************************************
+		void sendMessageWithCallbackSelector(const string &callbackSelectorName, Ref* target, SEL_EasyNDKFunc selector, const string &methodName, Ref* methodParams = nullptr);
+
+	protected:
+		CREATE_FUNC(NDKHelper);
+		virtual bool init();
+		virtual ~NDKHelper();
+		void removeAtIndex(int index);
+
+		static Ref* getRefFromJson(json_t *obj);
+		static json_t* getJsonFromRef(Ref* obj);
+
+	protected:
+		static NDKHelper *_instance;
+		Vector<NDKCallbackNode*> registeredSelectors;
+		Vector<NDKCalledSelector*> calledSelectors;
+	};
 }
 
 #endif // __NDK_HELPER_H__

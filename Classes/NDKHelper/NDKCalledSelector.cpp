@@ -1,5 +1,6 @@
 #include "NDKCalledSelector.h"
 #include "NDKCallbackNode.h"
+#include "NDKHelper.h"
 
 namespace easyndk {
 
@@ -32,6 +33,9 @@ NDKCalledSelector::~NDKCalledSelector()
 void NDKCalledSelector::executeCallback()
 {
 	_callback->executeCallfunc(_param);
+	if(_callback->shouldCleanupAfterCall()) {
+		NDKHelper::getInstance()->registeredSelectors.eraseObject(_callback);
+	}
 }
 
 }
