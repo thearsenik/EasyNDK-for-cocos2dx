@@ -58,7 +58,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>
       </SDLCheck>
-      <AdditionalIncludeDirectories>jansson-2.5\src;$(EngineRoot);$(EngineRoot)extensions;$(EngineRoot)cocos\audio\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>jansson-2.5\src;$(EngineRoot);$(EngineRoot)extensions;$(EngineRoot)cocos\audio\include;..\Classes\NDKHelper;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_LIB;COCOS2DXWIN32_EXPORTS;GL_GLEXT_PROTOTYPES;COCOS2D_DEBUG=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <DisableSpecificWarnings>4267;4251;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -88,10 +88,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\NDKHelper\NDKCallbackNode.h" />
+    <ClInclude Include="..\Classes\NDKHelper\NDKCalledSelector.h" />
     <ClInclude Include="..\Classes\NDKHelper\NDKHelper.h" />
+    <ClInclude Include="..\Classes\NDKHelper\NDKHelperDef.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\NDKHelper\NDKCallbackNode.cpp" />
+    <ClCompile Include="..\Classes\NDKHelper\NDKCalledSelector.cpp" />
     <ClCompile Include="..\Classes\NDKHelper\NDKHelper.cpp" />
   </ItemGroup>
   <ItemGroup>

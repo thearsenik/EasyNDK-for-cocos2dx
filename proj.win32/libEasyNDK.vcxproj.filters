@@ -3,9 +3,12 @@
   <ItemGroup>
     <ClInclude Include="..\Classes\NDKHelper\NDKCallbackNode.h" />
     <ClInclude Include="..\Classes\NDKHelper\NDKHelper.h" />
+    <ClInclude Include="..\Classes\NDKHelper\NDKCalledSelector.h" />
+    <ClInclude Include="..\Classes\NDKHelper\NDKHelperDef.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\NDKHelper\NDKHelper.cpp" />
     <ClCompile Include="..\Classes\NDKHelper\NDKCallbackNode.cpp" />
+    <ClCompile Include="..\Classes\NDKHelper\NDKCalledSelector.cpp" />
   </ItemGroup>
 </Project>

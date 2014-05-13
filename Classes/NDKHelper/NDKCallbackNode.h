@@ -3,31 +3,42 @@
 //  EasyNDK-for-cocos2dx
 //
 //  Created by Amir Ali Jiwani on 23/02/2013.
+//	Rewritten by Naël MSKINE on 12/05/2014.
 //
 //
 
-#ifndef __EasyNDK_for_cocos2dx__NDKCallbackNode__
-#define __EasyNDK_for_cocos2dx__NDKCallbackNode__
+#ifndef __NDK_CALLBACK_NODE_H__
+#define __NDK_CALLBACK_NODE_H__
 
 #include "cocos2d.h"
 #include <string>
+#include "NDKHelperDef.h"
+
 USING_NS_CC;
 using namespace std;
 
-class NDKCallbackNode
+namespace easyndk {
+
+class NDKCallbackNode : public Ref
 {
-    private :
-    SEL_CallFuncO sel;
-    string name;
-    string groupName;
-    CCObject *target;
-    
-    public :
-    NDKCallbackNode(const char *groupName, const char *name, SEL_CallFuncO sel, CCObject *target);
-    string getName();
-    string getGroup();
-    SEL_CallFuncO getSelector();
-    CCObject* getTarget();
+private :
+	string _name;
+	string _groupName;
+	Ref *_target;
+	SEL_EasyNDKFunc _selector;
+	std::function<void(Ref*)> _function;
+
+public :
+	static NDKCallbackNode* create(const string &groupName, const string &name, Ref *target, SEL_EasyNDKFunc sel);
+	static NDKCallbackNode* create(const string &groupName, const string &name, const std::function<void (Ref *)> &func);
+	virtual bool init(const string &groupName, const string &name, Ref *target, SEL_EasyNDKFunc sel);
+	virtual bool init(const string &groupName, const string &name, const std::function<void (Ref *)> &func);
+	virtual ~NDKCallbackNode();
+	string getName();
+	string getGroup();
+	void executeCallfunc(Ref *param);
 };
 
-#endif /* defined(__EasyNDK_for_cocos2dx__NDKCallbackNode__) */
+}
+
+#endif // __NDK_CALLBACK_NODE_H__

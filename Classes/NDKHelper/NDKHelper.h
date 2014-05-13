@@ -3,52 +3,53 @@
 //  EasyNDK-for-cocos2dx
 //
 //  Created by Amir Ali Jiwani on 23/02/2013.
-//	Modified by Naël MSKINE on 19/03/2014
+//	Rewritten by Naël MSKINE on 12/05/2014.
 //
 //
 
-#ifndef __EasyNDK_for_cocos2dx__NDKHelper__
-#define __EasyNDK_for_cocos2dx__NDKHelper__
+#ifndef __NDK_HELPER_H__
+#define __NDK_HELPER_H__
 
 #include <iostream>
 #include "cocos2d.h"
 #include <string>
 #include <vector>
 #include "jansson.h"
+#include "NDKHelperDef.h"
 #include "NDKCallbackNode.h"
+#include "NDKCalledSelector.h"
+
 USING_NS_CC;
 using namespace std;
 
-class NDKHelper : public CCObject
+namespace easyndk {
+
+class NDKHelper : public Ref
 {
-public :
-	static NDKHelper *SharedHelper();
-	static void DestroyHelper();
+public:
+	static NDKHelper *getInstance();
+	static void destroyInstance();
 
-	static CCObject* GetCCObjectFromJson(json_t *obj);
-	static json_t* GetJsonFromCCObject(CCObject* obj);
+	static Ref* getRefFromJson(json_t *obj);
+	static json_t* getJsonFromRef(Ref* obj);
 
-    void AddSelector(const char *groupName, const char *name, SEL_CallFuncO selector, CCObject* target);
-    void RemoveSelectorsInGroup(char *groupName);
-    void PrintSelectorList();
-	void HandleMessage(json_t *methodName, json_t* methodParams);
+	void addSelector(const string &groupName, const string &name, Ref* target, SEL_EasyNDKFunc selector);
+	void removeSelectorsInGroup(const string &groupName);
+	void printSelectorList();
+	void handleMessage(json_t *methodName, json_t* methodParams);
+	void sendMessageWithParams(const string &methodName, Ref* methodParams);
 
 protected:
 	CREATE_FUNC(NDKHelper);
 	virtual bool init();
 	virtual ~NDKHelper();
-	void RemoveAtIndex(int index);
-	void ExecuteCallfuncs(float dt);
+	void removeAtIndex(int index);
 
 protected:
-	static NDKHelper *_sharedHelper;
-	vector<NDKCallbackNode> selectorList;
-	CCArray *callfuncs;
+	static NDKHelper *_instance;
+	Vector<NDKCallbackNode*> registeredSelectors;
+	Vector<NDKCalledSelector*> calledSelectors;
 };
-
-extern "C"
-{
-    void SendMessageWithParams(string methodName, CCObject* methodParams);
 }
 
-#endif /* defined(__EasyNDK_for_cocos2dx__NDKHelper__) */
+#endif // __NDK_HELPER_H__

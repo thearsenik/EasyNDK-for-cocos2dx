@@ -3,35 +3,83 @@
 //  EasyNDK-for-cocos2dx
 //
 //  Created by Amir Ali Jiwani on 23/02/2013.
+//	Rewritten by Naël MSKINE on 12/05/2014.
 //
 //
 
 #include "NDKCallbackNode.h"
 
-NDKCallbackNode::NDKCallbackNode(const char *groupName, const char *name, SEL_CallFuncO sel, CCObject *target)
+namespace easyndk {
+
+NDKCallbackNode* NDKCallbackNode::create( const string &groupName, const string &name, Ref *target, SEL_EasyNDKFunc sel )
 {
-    this->groupName = groupName;
-    this->name = name;
-    this->sel = sel;
-    this->target = target;
+	auto ret = new NDKCallbackNode();
+	if (ret && ret->init(groupName, name, target, sel) ) {
+		ret->autorelease();
+		return ret;
+	}
+	CC_SAFE_DELETE(ret);
+	return nullptr;
+}
+
+NDKCallbackNode* NDKCallbackNode::create( const string &groupName, const string &name, const std::function<void (Ref *)> &func )
+{
+	auto ret = new NDKCallbackNode();
+	if (ret && ret->init(groupName, name, func) ) {
+		ret->autorelease();
+		return ret;
+	}
+	CC_SAFE_DELETE(ret);
+	return nullptr;
+}
+
+bool NDKCallbackNode::init( const string &groupName, const string &name, Ref *target, SEL_EasyNDKFunc sel )
+{
+	CC_SAFE_RETAIN(target);
+	this->_target = target;
+	this->_selector = sel;
+	this->_function = nullptr;
+	this->_groupName = groupName;
+	this->_name = name;
+
+	return true;
+}
+
+bool NDKCallbackNode::init(const string &groupName, const string &name, const std::function<void (Ref *)> &func)
+{
+	CC_SAFE_RETAIN(_target);
+	this->_target = nullptr;
+	this->_selector = nullptr;
+	this->_function = func;
+	this->_groupName = groupName;
+	this->_name = name;
+
+	return true;
+}
+
+NDKCallbackNode::~NDKCallbackNode()
+{
+	CC_SAFE_RELEASE(_target);
 }
 
 string NDKCallbackNode::getName()
 {
-    return this->name;
+	return this->_name;
 }
 
 string NDKCallbackNode::getGroup()
 {
-    return this->groupName;
+	return this->_groupName;
 }
 
-SEL_CallFuncO NDKCallbackNode::getSelector()
+void NDKCallbackNode::executeCallfunc(Ref *param)
 {
-    return this->sel;
+	if (_target == nullptr) {
+		(_target->*_selector)(param);
+	}
+	else if (_function) {
+		_function(param);
+	}
 }
 
-CCObject* NDKCallbackNode::getTarget()
-{
-    return this->target;
 }
