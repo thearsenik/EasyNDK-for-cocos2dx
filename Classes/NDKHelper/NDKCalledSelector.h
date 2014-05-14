@@ -20,7 +20,7 @@ namespace easyndk {
 
 class NDKCalledSelector : public Ref
 {
-private:
+protected:
 	NDKCallbackNode *_callback;
 	Ref *_param;
 

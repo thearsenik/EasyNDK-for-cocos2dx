@@ -243,9 +243,8 @@ namespace easyndk {
 #define  LOG_TAG    "EasyNDK-for-cocos2dx"
 
 #define CLASS_NAME "com/easyndk/classes/AndroidNDKHelper"
-#endif
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #import "IOSNDKHelper-C-Interface.h"
 #endif
 
@@ -331,8 +330,11 @@ namespace easyndk {
 
 			json_decref(jsonMessageName);
 #else
-			// TODO
-
+			for(auto mock : registeredMocks) {
+				if(mock->getName() == methodName) {
+					mock->executeCallfunc(methodParams);
+				}
+			}
 #endif
 		}
 	}
@@ -347,6 +349,11 @@ namespace easyndk {
 	{
 		addSelector("", callbackSelectorName, func, true);
 		sendMessage(methodName, methodParams);
+	}
+
+	void NDKHelper::addMock( const string &methodName, const std::function<void(Ref *)> &func )
+	{
+		registeredMocks.pushBack(NDKMock::create(methodName, func));
 	}
 
 }

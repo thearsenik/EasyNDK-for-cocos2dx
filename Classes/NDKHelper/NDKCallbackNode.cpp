@@ -48,7 +48,6 @@ bool NDKCallbackNode::init( const string &groupName, const string &name, Ref *ta
 
 bool NDKCallbackNode::init(const string &groupName, const string &name, const std::function<void (Ref *)> &func, bool cleanupAfterCall)
 {
-	CC_SAFE_RETAIN(_target);
 	this->_target = nullptr;
 	this->_selector = nullptr;
 	this->_function = func;

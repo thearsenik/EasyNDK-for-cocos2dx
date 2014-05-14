@@ -21,7 +21,7 @@ namespace easyndk {
 
 class NDKCallbackNode : public Ref
 {
-private :
+protected :
 	string _name;
 	string _groupName;
 	Ref *_target;
