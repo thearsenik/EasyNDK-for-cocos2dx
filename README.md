@@ -15,10 +15,55 @@ Every call is encoded by EasyNDK's Helper in a JSON message that is transmitted 
 
 ## In your C++ code
 ### Calling a native method
-**_TODO_**
+EasyNDK let you call a native method with a single line of code:
+```C++
+NDKHelper::getInstance()->sendMessageWithParams("showAd");
+```
+And with parameters:
+```C++
+cocos2d::String *param = cocos2d::String("my name is not Mr.Anderson...");
+NDKHelper::getInstance()->sendMessageWithParams("showLeaderboard", param);
+```
+
+Parameters could be of type:
+
+- TODO: list type of parameters.
+
+The native method will be called by using the reflection mecanism so that's all you have to do. **Please read the section about your platform to know what you have to do on it.**
 
 ### Handling a native method call
-**_TODO_**
+Of course EasyNDK let you communicate from native environment to your C++ code. Before calling a C++ method from your native environment, you need to tell EasyNDK which selector to call. In native environment this step is not needed because there are reflection mecanisms but C++ does not provide this functionnality (this would be a greate improvement isn't it?).
+So you need to call "addSelector" method from the NDKHelper which fills a "Map" that makes the connection between a name of a method and the method it self.
+Here is an example of what you have to write in your C++ code:
+```C++
+NDKHelper::getInstance()->addSelector("MyGroup", "showLeaderboardCallback", [](Ref *param) {
+ // Do something
+}, false); 
+```
+You can also use the C++ version with an object (target) and a function pointer (selector):
+```C++
+NDKHelper::getInstance()->addSelector("MyGroup2", "showAchievementsCallback", this, easyndkfunc_selector(MyMenu::showAchievementsCallback), false); 
+```
+
+Now you can call you C++ method from your native environment. **Please read the section about your platform to know what you have to do on it.**
+
+**Note:** You have to remove your selector when you delete the target object. This point is very important because it could lead to crashes if you don't do it. If your selector will be called once, pass "true" as the last parameter in "addSelector" method.
+
+### An easier way to write your code
+In most cases you will need to call a native method and have a method that will be called back when native code execution has ended. That's why EasyNDK provides a simple way to call a method and to execute a callback method.
+Here is an example:
+```C++
+NDKHelper::getInstance()->sendMessageWithCallbackSelector("showAdCallback", [](cocos2d::Ref *param) {
+	cocos2d::String *paramStr = static_cast<cocos2d::String *>(param);
+	if(paramStr->boolValue()) {
+		CCLOG("The user watched my Ad! Because I need $ .... ");
+	}
+	else {
+		CCLOG("No ad to watch");
+	}
+}, "showAd");
+```
+In this case your selector can be called only once. It is automatically removed after the native call (this is the cleanup functionnality) but this is what you need in most cases.
 
 ## Android
 **_TODO_**
