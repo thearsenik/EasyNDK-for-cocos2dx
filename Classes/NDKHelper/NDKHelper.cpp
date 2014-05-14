@@ -45,6 +45,11 @@ namespace easyndk {
 		registeredSelectors.pushBack(NDKCallbackNode::create(groupName, name, target, selector, withCleanup));
 	}
 
+	void NDKHelper::addSelector( const string &groupName, const string &name, const std::function<void(Ref *)> &func, bool withCleanup /*= true*/ )
+	{
+		registeredSelectors.pushBack(NDKCallbackNode::create(groupName, name, func, withCleanup));
+	}
+
 	void NDKHelper::removeAtIndex(int index)
 	{
 		registeredSelectors.erase(index);
@@ -334,7 +339,13 @@ namespace easyndk {
 
 	void NDKHelper::sendMessageWithCallbackSelector( const string &callbackSelectorName, Ref* target, SEL_EasyNDKFunc selector, const string &methodName, Ref* methodParams /*= nullptr*/ )
 	{
-		addSelector("", callbackSelectorName, target, selector);
+		addSelector("", callbackSelectorName, target, selector, true);
+		sendMessage(methodName, methodParams);
+	}
+
+	void NDKHelper::sendMessageWithCallbackSelector( const string &callbackSelectorName, const std::function<void(Ref *)> &func, const string &methodName, Ref* methodParams /*= nullptr*/ )
+	{
+		addSelector("", callbackSelectorName, func, true);
 		sendMessage(methodName, methodParams);
 	}
 

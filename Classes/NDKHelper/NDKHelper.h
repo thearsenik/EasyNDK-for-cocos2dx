@@ -61,6 +61,19 @@ namespace easyndk {
 		void addSelector(const string &groupName, const string &name, Ref* target, SEL_EasyNDKFunc selector, bool withCleanup = true);
 
 		//************************************
+		// Method:    addSelector
+		// FullName:  easyndk::NDKHelper::addSelector
+		// Access:    public 
+		// Returns:   void
+		// Qualifier: Register a lambda function to be called if "name" is called by the native environment
+		// Parameter: const string & groupName: An identifier to specify when you want to remove this selector
+		// Parameter: const string & name: The name of the selector that native environment will call
+		// Parameter: const std::function<void(Ref *)> & selectorFunc: the lambda function to call when "name" is called by native environment
+		// Parameter: bool withCleanup: if true this selector will be automatically removed after a call so it's a single callable selector. Otherwise you will have to remove it your self. Default value is true.
+		//************************************
+		void addSelector(const string &groupName, const string &name, const std::function<void(Ref *)> &func, bool withCleanup = true);
+
+		//************************************
 		// Method:    removeSelectorsInGroup
 		// FullName:  easyndk::NDKHelper::removeSelectorsInGroup
 		// Access:    public 
@@ -114,6 +127,19 @@ namespace easyndk {
 		// Parameter: Ref * methodParams: it corresponds to "sendMessage"'s "methodParams" parameter
 		//************************************
 		void sendMessageWithCallbackSelector(const string &callbackSelectorName, Ref* target, SEL_EasyNDKFunc selector, const string &methodName, Ref* methodParams = nullptr);
+
+		//************************************
+		// Method:    sendMessageWithCallbackSelector
+		// FullName:  easyndk::NDKHelper::sendMessageWithCallbackSelector
+		// Access:    public 
+		// Returns:   void
+		// Qualifier: Add a single callable selector (with a lambda function) then send a message to native environment (use it to call your native code that will call back your code once).
+		// Parameter: const string & callbackSelectorName: it corresponds to "addSelector"'s "name" parameter 
+		// Parameter: const std::function<void>(Ref*) & func: it corresponds to "addSelector"'s "func" parameter
+		// Parameter: const string & methodName: it corresponds to "sendMessage"'s "methodName" parameter
+		// Parameter: Ref * methodParams: it corresponds to "sendMessage"'s "methodParams" parameter
+		//************************************
+		void sendMessageWithCallbackSelector(const string &callbackSelectorName, const std::function<void(Ref *)> &func, const string &methodName, Ref* methodParams = nullptr);
 
 	protected:
 		CREATE_FUNC(NDKHelper);
