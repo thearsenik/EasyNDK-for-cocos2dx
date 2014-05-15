@@ -14,6 +14,13 @@ Every call is encoded by EasyNDK's Helper in a JSON message that is transmitted 
 **Warning:** The way this framework is working should warn you that it is made to be used with sparingly (encoding/decoding into/from JSON and reflection mecanism are a bit costly in time). I recommend you not to use this framework if you want to call native code every frame of your Cocos2d-X app. Otherwise you can use it.
 
 ## In your C++ code
+*All your C++ code will require to include "NDKHelper.h" and use "easyndk" namespace. So please copy the following code in all your files*
+```C++
+#include "NDKHelper.h"
+
+using namespace easyndk;
+```
+
 ### Calling a native method
 EasyNDK let you call a native method with a single line of code:
 ```C++
