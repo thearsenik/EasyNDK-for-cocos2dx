@@ -34,7 +34,10 @@ NDKHelper::getInstance()->sendMessageWithParams("showLeaderboard", param);
 
 Parameters could be of type:
 
-- TODO: list type of parameters.
+- ``` easyndk::NDKDictionary * ```
+- ``` easyndk::NDKArray * ```
+- ``` cocos2d::String * ```
+- ``` cocos2d::Integer * ```
 
 The native method will be called by using the reflection mecanism so that's all you have to do. **Please read the section about your platform to know what you have to do on it.**
 
