@@ -142,6 +142,15 @@ namespace easyndk {
 		void sendMessageWithCallbackSelector(const string &callbackSelectorName, const std::function<void(Ref *)> &func, const string &methodName, Ref* methodParams = nullptr);
 
 #if (!(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID && CC_TARGET_PLATFORM == CC_PLATFORM_IOS))
+		//************************************
+		// Method:    addMock
+		// FullName:  easyndk::NDKHelper::addMock
+		// Access:    public 
+		// Returns:   void
+		// Qualifier: Add a mock that simulate the native call of "methodName"
+		// Parameter: const string & methodName: the name of the method that is simulated with mock
+		// Parameter: const std::function<void(Ref *)> & func: the lambda function that simulates the native call
+		//************************************
 		void addMock(const string &methodName, const std::function<void(Ref *)> &func);
 
 	protected:

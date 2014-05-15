@@ -71,10 +71,9 @@ namespace easyndk {
 
 		if (json_is_object(obj))
 		{
-			CCDictionary *dictionary = new CCDictionary();
-			//CCDictionary::create();
+			NDKDictionary<Ref*> *dictionary = NDKDictionary<Ref*>::create();
 
-			const char *key;
+			string key;
 			json_t *value;
 
 			void *iter = json_object_iter(obj);
@@ -83,7 +82,7 @@ namespace easyndk {
 				key = json_object_iter_key(iter);
 				value = json_object_iter_value(iter);
 
-				dictionary->setObject(getRefFromJson(value)->autorelease(), string(key));
+				dictionary->insert(key, getRefFromJson(value));
 
 				iter = json_object_iter_next(obj, iter);
 			}
@@ -93,12 +92,11 @@ namespace easyndk {
 		else if (json_is_array(obj))
 		{
 			size_t sizeArray = json_array_size(obj);
-			CCArray *array = new CCArray();
-			//CCArray::createWithCapacity(sizeArray);
+			NDKArray<Ref*> *array = NDKArray<Ref*>::create();
 
 			for (unsigned int i = 0; i < sizeArray; i++)
 			{
-				array->addObject(getRefFromJson(json_array_get(obj, i))->autorelease());
+				array->pushBack(getRefFromJson(json_array_get(obj, i)));
 			}
 
 			return array;
@@ -106,13 +104,9 @@ namespace easyndk {
 		else if (json_is_boolean(obj))
 		{
 			stringstream str;
-			if (json_is_true(obj))
-				str << true;
-			else if (json_is_false(obj))
-				str << false;
+			str << json_is_true(obj);
 
-			CCString *ccString = new CCString(str.str());
-			//CCString::create(str.str());
+			String *ccString = String::create(str.str());
 			return ccString;
 		}
 		else if (json_is_integer(obj))
@@ -120,8 +114,7 @@ namespace easyndk {
 			stringstream str;
 			str << json_integer_value(obj);
 
-			CCString *ccString = new CCString(str.str());
-			//CCString::create(str.str());
+			String *ccString = String::create(str.str());
 			return ccString;
 		}
 		else if (json_is_real(obj))
@@ -129,8 +122,7 @@ namespace easyndk {
 			stringstream str;
 			str << json_real_value(obj);
 
-			CCString *ccString = new CCString(str.str());
-			//CCString::create(str.str());
+			String *ccString = String::create(str.str());
 			return ccString;
 		}
 		else if (json_is_string(obj))
@@ -138,13 +130,15 @@ namespace easyndk {
 			stringstream str;
 			str << json_string_value(obj);
 
-			CCString *ccString = new CCString(str.str());
-			//CCString::create(str.str());
+			String *ccString = String::create(str.str());
 			return ccString;
 		}
 		else if (json_is_null(obj)) 
 		{
-			return new CCString("null");
+			return String::create("null");
+		}
+		else {
+			CCLOG("EasynNDK Warning: can't convert to a Ref* a json object from an unknown type");
 		}
 
 		return NULL;
@@ -152,46 +146,41 @@ namespace easyndk {
 
 	json_t* NDKHelper::getJsonFromRef(Ref* obj)
 	{
-		if (dynamic_cast<CCDictionary*>(obj))
+		if (dynamic_cast<NDKDictionary<Ref>*>(obj))
 		{
-			CCDictionary *mainDict = (CCDictionary*)obj;
-			CCArray *allKeys = mainDict->allKeys();
-			json_t* jsonDict = json_object();
+			NDKDictionary<Ref*> *mainDict = (NDKDictionary<Ref*>*)obj;
 
-			if(allKeys == NULL ) return jsonDict;
-			for (unsigned int i = 0; i < allKeys->count(); i++)
-			{
-				const char *key = ((CCString*)allKeys->objectAtIndex(i))->getCString();
+			json_t* jsonDict = json_object();
+			for(auto dictElt = mainDict->begin(); dictElt != mainDict->end(); dictElt++) {
 				json_object_set_new(jsonDict,
-					key,
-					getJsonFromRef(mainDict->objectForKey(key)));
+					dictElt->first.c_str(),
+					getJsonFromRef(dictElt->second));
 			}
 
 			return jsonDict;
 		}
-		else if (dynamic_cast<CCArray*>(obj))
+		else if (dynamic_cast<NDKArray<Ref*>*>(obj))
 		{
-			CCArray* mainArray = (CCArray*)obj;
+			NDKArray<Ref*>* mainArray = (NDKArray<Ref*>*)obj;
 			json_t* jsonArray = json_array();
 
-			for (unsigned int i = 0; i < mainArray->count(); i++)
-			{
+			for (auto ref : *mainArray) {
 				json_array_append_new(jsonArray,
-					getJsonFromRef(mainArray->objectAtIndex(i)));
+					getJsonFromRef(ref));
 			}
 
 			return jsonArray;
 		}
-		else if (dynamic_cast<CCString*>(obj))
+		else if (dynamic_cast<String*>(obj))
 		{
-			CCString* mainString = (CCString*)obj;
+			String* mainString = (String*)obj;
 			json_t* jsonString = json_string(mainString->getCString());
 
 			return jsonString;
 		}
-		else if(dynamic_cast<CCInteger*>(obj)) 
+		else if(dynamic_cast<Integer*>(obj)) 
 		{
-			CCInteger *mainInteger = (CCInteger*) obj;
+			Integer *mainInteger = (Integer*) obj;
 			json_t* jsonString = json_integer(mainInteger->getValue());
 
 			return jsonString;
