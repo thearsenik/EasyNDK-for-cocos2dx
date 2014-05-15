@@ -101,7 +101,7 @@ Open your solution in Visual Studio (I'm using Visual Studio 2012). You need to 
 
 Don't forget to tell Visual Studio you depend on EasyNDK project and to add jansson and EasyNDK folders to include paths by:
 
-1. Right click on the solution > properties
+1. Right click on your project (your vcxproj) > properties
 2. In the left tree view select Common properties > Framework and References
 3. Click on the "Add References" button
 4. Check libEasyNDK project
