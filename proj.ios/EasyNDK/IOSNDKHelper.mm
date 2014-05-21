@@ -15,7 +15,7 @@
 
 static NSObject *helperInstance = nil;
 
-void IOSNDKHelperImpl::SetNDKReciever(void *reciever)
+void IOSNDKHelperImpl::setNDKReciever(void *reciever)
 {
     helperInstance = (NSObject*)reciever;
 }
@@ -28,7 +28,7 @@ NSObject *getHelperInstance()
 #pragma mark -
 #pragma mark IOSNDKHelperImpl Methods
 
-void IOSNDKHelperImpl::RecieveCPPMessage(json_t *methodName, json_t *methodParams)
+void IOSNDKHelperImpl::receiveCppMessage(json_t *methodName, json_t *methodParams)
 {
     NSObject *reciever = getHelperInstance();
     if (reciever == nil)
@@ -51,7 +51,7 @@ void IOSNDKHelperImpl::RecieveCPPMessage(json_t *methodName, json_t *methodParam
         // Return from message if the selector won't respond to our reciever
         if (![reciever respondsToSelector:selectorToBeCalled])
         {
-            NSLog(@"Reciever won't respond to selector : %@", methodCalledStr);
+            NSLog(@"Receiver won't respond to selector : %@", methodCalledStr);
             return;
         }
     }
@@ -100,7 +100,7 @@ void IOSNDKHelperImpl::RecieveCPPMessage(json_t *methodName, json_t *methodParam
 
 @implementation IOSNDKHelper
 
-+(void)SendMessage:(NSString *)methodName WithParameters:(NSDictionary *)prms
++(void)sendMessage:(NSString *)methodName withParameters:(NSDictionary *)prms
 {
     json_t* jsonMethod = json_string([methodName UTF8String]);
     json_t *jsonPrms = NULL;
@@ -132,15 +132,15 @@ void IOSNDKHelperImpl::RecieveCPPMessage(json_t *methodName, json_t *methodParam
         jsonPrmsString = nil;
     }
     
-    NDKHelper::SharedHelper()->HandleMessage(jsonMethod, jsonPrms);
+    easyndk::NDKHelper::getInstance()->handleMessage(jsonMethod, jsonPrms);
     json_decref(jsonMethod);
     
     if (jsonPrms)
         json_decref(jsonPrms);
 }
 
-+ (void) SetNDKReciever:(NSObject*)reciever
++ (void) setNDKReciever:(NSObject*)reciever
 {
-    IOSNDKHelperImpl::SetNDKReciever((void*)reciever);
+    IOSNDKHelperImpl::setNDKReciever((void*)reciever);
 }
 @end

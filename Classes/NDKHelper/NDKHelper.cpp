@@ -309,12 +309,12 @@ namespace easyndk {
 			if (methodParams != nullptr)
 			{
 				json_t *jsonParams = getJsonFromRef(methodParams);
-				IOSNDKHelperImpl::RecieveCPPMessage(jsonMessageName, jsonParams);
+				IOSNDKHelperImpl::receiveCppMessage(jsonMessageName, jsonParams);
 				json_decref(jsonParams);
 			}
 			else
 			{
-				IOSNDKHelperImpl::RecieveCPPMessage(jsonMessageName, null);
+				IOSNDKHelperImpl::receiveCppMessage(jsonMessageName, nullptr);
 			}
 
 			json_decref(jsonMessageName);

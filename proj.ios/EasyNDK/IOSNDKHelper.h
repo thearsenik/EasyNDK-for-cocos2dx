@@ -13,8 +13,8 @@
 
 @interface IOSNDKHelper : NSObject
 
-+ (void) SetNDKReciever:(NSObject*)reciever;
-+ (void) SendMessage:(NSString*)methodName WithParameters:(NSDictionary*)prms;
++ (void) setNDKReciever:(NSObject*)reciever;
++ (void) sendMessage:(NSString*)methodName withParameters:(NSDictionary*)prms;
 
 @end
 
