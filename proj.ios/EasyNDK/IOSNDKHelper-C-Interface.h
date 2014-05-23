@@ -25,7 +25,7 @@ class IOSNDKHelperImpl
         IOSNDKHelperImpl();
         ~IOSNDKHelperImpl();
         static void receiveCppMessage(json_t *methodName, json_t* methodParams);
-        static void setNDKReciever(void* reciever);
+        static void setNDKReceiver(void* receiver);
 };
 
 #endif

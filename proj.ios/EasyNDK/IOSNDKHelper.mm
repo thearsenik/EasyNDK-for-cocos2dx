@@ -15,9 +15,9 @@
 
 static NSObject *helperInstance = nil;
 
-void IOSNDKHelperImpl::setNDKReciever(void *reciever)
+void IOSNDKHelperImpl::setNDKReceiver(void *receiver)
 {
-    helperInstance = (NSObject*)reciever;
+    helperInstance = (NSObject*)receiver;
 }
 
 NSObject *getHelperInstance()
@@ -30,8 +30,8 @@ NSObject *getHelperInstance()
 
 void IOSNDKHelperImpl::receiveCppMessage(json_t *methodName, json_t *methodParams)
 {
-    NSObject *reciever = getHelperInstance();
-    if (reciever == nil)
+    NSObject *receiver = getHelperInstance();
+    if (receiver == nil)
     {
         return;
     }
@@ -48,8 +48,8 @@ void IOSNDKHelperImpl::receiveCppMessage(json_t *methodName, json_t *methodParam
     {
         selectorToBeCalled = NSSelectorFromString(methodCalledStr);
         
-        // Return from message if the selector won't respond to our reciever
-        if (![reciever respondsToSelector:selectorToBeCalled])
+        // Return from message if the selector won't respond to our receiver
+        if (![receiver respondsToSelector:selectorToBeCalled])
         {
             NSLog(@"Receiver won't respond to selector : %@", methodCalledStr);
             return;
@@ -82,7 +82,7 @@ void IOSNDKHelperImpl::receiveCppMessage(json_t *methodName, json_t *methodParam
         // If parameters are available call the respective selector with parameters
         if (error == nil)
         {
-            [reciever performSelector:selectorToBeCalled withObject:json];
+            [receiver performSelector:selectorToBeCalled withObject:json];
         }
         else
         {
@@ -91,7 +91,7 @@ void IOSNDKHelperImpl::receiveCppMessage(json_t *methodName, json_t *methodParam
     }
     else
     {
-        [reciever performSelector:selectorToBeCalled withObject:[NSDictionary dictionary]];
+        [receiver performSelector:selectorToBeCalled withObject:[NSDictionary dictionary]];
     }
 }
 
@@ -139,8 +139,8 @@ void IOSNDKHelperImpl::receiveCppMessage(json_t *methodName, json_t *methodParam
         json_decref(jsonPrms);
 }
 
-+ (void) setNDKReciever:(NSObject*)reciever
++ (void) setNDKReceiver:(NSObject*)receiver
 {
-    IOSNDKHelperImpl::setNDKReciever((void*)reciever);
+    IOSNDKHelperImpl::setNDKReceiver((void*)receiver);
 }
 @end

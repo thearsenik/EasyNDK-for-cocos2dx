@@ -10,6 +10,10 @@
 #include "NDKHelper.h"
 #include "NDKCallbackNode.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#import "IOSNDKHelper-C-Interface.h"
+#endif
+
 namespace easyndk {
 
 #define K_CALLED_METHOD_NAME "calling_method_name"
@@ -233,10 +237,8 @@ namespace easyndk {
 
 #define CLASS_NAME "com/easyndk/classes/AndroidNDKHelper"
 
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#import "IOSNDKHelper-C-Interface.h"
 #endif
-
+    
 	extern "C"
 	{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -339,10 +341,12 @@ namespace easyndk {
 		addSelector("", callbackSelectorName, func, true);
 		sendMessage(methodName, methodParams);
 	}
-
+    
+#if (!(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID && CC_TARGET_PLATFORM == CC_PLATFORM_IOS))
 	void NDKHelper::addMock( const string &methodName, const std::function<void(Ref *)> &func )
 	{
 		registeredMocks.pushBack(NDKMock::create(methodName, func));
 	}
+#endif
 
 }
