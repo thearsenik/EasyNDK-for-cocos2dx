@@ -140,10 +140,10 @@ return Application::getInstance()->run();
 ```
 add your mocks:
 ```C++
-NDKHelper::getInstance()->addMock("myMethod", [](Ref *params) {
-  cocos2d::Map<std::string, cocos2d::Ref *> parameters;
-  parameters.insert("foo", cocos2d::String("bar"));
-  parameters.insert("number", cocos2d::String("2"));
+easyndk::NDKHelper::getInstance()->addMock("myMethod", [](Ref *params) {
+  auto parameters = easyndk::NDKDictionary<std::string, cocos2d::Ref*>::create();
+  parameters->insert("foo", cocos2d::String::create("bar"));
+  parameters->insert("number", cocos2d::String::create("2"));
   NDKHelper::getInstance()->callSelector("myMethodCallback", parameters);
 });
 ```
