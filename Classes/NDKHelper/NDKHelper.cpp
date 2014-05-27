@@ -150,7 +150,7 @@ namespace easyndk {
 
 	json_t* NDKHelper::getJsonFromRef(Ref* obj)
 	{
-		if (dynamic_cast<NDKDictionary<Ref>*>(obj))
+		if (dynamic_cast<NDKDictionary<Ref*>*>(obj))
 		{
 			NDKDictionary<Ref*> *mainDict = (NDKDictionary<Ref*>*)obj;
 
