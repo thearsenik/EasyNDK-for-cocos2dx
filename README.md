@@ -144,7 +144,7 @@ easyndk::NDKHelper::getInstance()->addMock("myMethod", [](Ref *params) {
   auto parameters = easyndk::NDKDictionary<std::string, cocos2d::Ref*>::create();
   parameters->insert("foo", cocos2d::String::create("bar"));
   parameters->insert("number", cocos2d::String::create("2"));
-  NDKHelper::getInstance()->callSelector("myMethodCallback", parameters);
+  easyndk::NDKHelper::getInstance()->callSelector("myMethodCallback", parameters);
 });
 ```
 You can also encapsulate your mocks in a seperate class but don't forget to call your code before cocos2d-X.
