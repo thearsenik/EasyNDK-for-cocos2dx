@@ -81,10 +81,17 @@ In this case your selector can be called only once. It is automatically removed 
 ## iOS SDK / XCode
 ### Setup your project
 Once you generated a project with Cocos2d-X tools, open your XCode project.
-In XCode click on Files > Add file in <your project>. Select libEasyNDK.xcodeproj located in EasyNDK/proj.ios.
-You also need to define a delegate that will handle your C++ calls. Usually the RootViewController is a good choice to do this job but you can create an other class to do it. Here is the code to define the delegate:
+In XCode drag & drop EasyNDK folder located in PATH_TO_EASYNDK/proj.ios/ into your project. Select the following options and click on Finish.
+
+![](https://raw.githubusercontent.com/thearsenik/EasyNDK-for-cocos2dx/cocos2d-x-3/tutorial/add%20options.png)
+
+Add also the folders located in PATH_TO_EASYNDK/Classes/ (jansson and NDKHelper) into your project (in your Classes or in EasyNDK, it doesn't matter). You should have this kind of project tree:
+
+![](https://raw.githubusercontent.com/thearsenik/EasyNDK-for-cocos2dx/cocos2d-x-3/tutorial/project%20tree.png)
+
+Now you need to define a delegate that will handle your C++ calls. Usually the RootViewController is a good choice to do this job but you can create an other class to do it. Here is the code to define the delegate:
 ```Objective-C
-[IOSNDKHelper SetNDKReciever:self];
+[IOSNDKHelper setNDKReciever:self];
 ```
 
 ### In your Objective-C code
@@ -95,7 +102,7 @@ When you call a method from C++, EasyNDK searches for it in the delegate class. 
 
 To call a method from Objective-C to C++ (for instance when you callback your code after a job) you simply call IOSNDKHelper like that:
 ```Objective-C
-[IOSNDKHelper SendMessage:CPPFunctionToBeCalled WithParameters:nil];
+[IOSNDKHelper sendMessage:cppFunctionToBeCalled withParameters:nil];
 ```
 
 ## Win32 / Visual Studio 2012
@@ -133,11 +140,11 @@ return Application::getInstance()->run();
 ```
 add your mocks:
 ```C++
-NDKHelper::getInstance()->addMock("myMethod", [](Ref *params) {
-  cocos2d::Map<std::string, cocos2d::Ref *> parameters;
-  parameters.insert("foo", cocos2d::String("bar"));
-  parameters.insert("number", cocos2d::String("2"));
-  NDKHelper::getInstance()->callSelector("myMethodCallback", parameters);
+easyndk::NDKHelper::getInstance()->addMock("myMethod", [](Ref *params) {
+  auto parameters = easyndk::NDKDictionary<std::string, cocos2d::Ref*>::create();
+  parameters->insert("foo", cocos2d::String::create("bar"));
+  parameters->insert("number", cocos2d::String::create("2"));
+  easyndk::NDKHelper::getInstance()->callSelector("myMethodCallback", parameters);
 });
 ```
 You can also encapsulate your mocks in a seperate class but don't forget to call your code before cocos2d-X.

@@ -10,6 +10,10 @@
 #include "NDKHelper.h"
 #include "NDKCallbackNode.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#import "IOSNDKHelper-C-Interface.h"
+#endif
+
 namespace easyndk {
 
 #define K_CALLED_METHOD_NAME "calling_method_name"
@@ -146,7 +150,7 @@ namespace easyndk {
 
 	json_t* NDKHelper::getJsonFromRef(Ref* obj)
 	{
-		if (dynamic_cast<NDKDictionary<Ref>*>(obj))
+		if (dynamic_cast<NDKDictionary<Ref*>*>(obj))
 		{
 			NDKDictionary<Ref*> *mainDict = (NDKDictionary<Ref*>*)obj;
 
@@ -219,10 +223,8 @@ namespace easyndk {
 
 #define CLASS_NAME "com/easyndk/classes/AndroidNDKHelper"
 
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#import "IOSNDKHelper-C-Interface.h"
 #endif
-
+    
 	extern "C"
 	{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -295,12 +297,12 @@ namespace easyndk {
 			if (methodParams != nullptr)
 			{
 				json_t *jsonParams = getJsonFromRef(methodParams);
-				IOSNDKHelperImpl::RecieveCPPMessage(jsonMessageName, jsonParams);
+				IOSNDKHelperImpl::receiveCppMessage(jsonMessageName, jsonParams);
 				json_decref(jsonParams);
 			}
 			else
 			{
-				IOSNDKHelperImpl::RecieveCPPMessage(jsonMessageName, null);
+				IOSNDKHelperImpl::receiveCppMessage(jsonMessageName, nullptr);
 			}
 
 			json_decref(jsonMessageName);
@@ -325,11 +327,13 @@ namespace easyndk {
 		addSelector("", callbackSelectorName, func, true);
 		sendMessage(methodName, methodParams);
 	}
-
+    
+#if (!(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID && CC_TARGET_PLATFORM == CC_PLATFORM_IOS))
 	void NDKHelper::addMock( const string &methodName, const std::function<void(Ref *)> &func )
 	{
 		registeredMocks.pushBack(NDKMock::create(methodName, func));
 	}
+#endif
 
 	void NDKHelper::callSelector( const string &methodName, Ref * param )
 	{

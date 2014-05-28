@@ -9,7 +9,10 @@
 #ifndef EasyNDK_for_cocos2dx_IOSNDKHelper_C_Interface_h
 #define EasyNDK_for_cocos2dx_IOSNDKHelper_C_Interface_h
 
+#ifdef __cplus
 #include <iostream>
+#endif
+
 #include "cocos2d.h"
 #include "jansson.h"
 #include <string>
@@ -21,8 +24,8 @@ class IOSNDKHelperImpl
     public :
         IOSNDKHelperImpl();
         ~IOSNDKHelperImpl();
-        static void RecieveCPPMessage(json_t *methodName, json_t* methodParams);
-        static void SetNDKReciever(void* reciever);
+        static void receiveCppMessage(json_t *methodName, json_t* methodParams);
+        static void setNDKReceiver(void* receiver);
 };
 
 #endif

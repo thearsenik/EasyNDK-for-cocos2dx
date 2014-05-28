@@ -76,10 +76,10 @@ string NDKCallbackNode::getGroup()
 void NDKCallbackNode::executeCallfunc(Ref *param)
 {
 	if (_target == nullptr) {
-		(_target->*_selector)(param);
+		_function(param);
 	}
 	else if (_function) {
-		_function(param);
+		(_target->*_selector)(param);
 	}
 }
 
