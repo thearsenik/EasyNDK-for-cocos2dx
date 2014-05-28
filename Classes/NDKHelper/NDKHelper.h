@@ -104,6 +104,17 @@ namespace easyndk {
 		void handleMessage(json_t *methodName, json_t* methodParams);
 
 		//************************************
+		// Method:    callSelector
+		// FullName:  easyndk::NDKHelper::callSelector
+		// Access:    public 
+		// Returns:   void
+		// Qualifier: This method will call a previously registered selector. The selector is found by his name (methodName
+		// Parameter: string & methodName: the name of the selector
+		// Parameter: Ref * params: parameters to pass to the selector
+		//************************************
+		void callSelector( const string &methodName, Ref * params );
+
+		//************************************
 		// Method:    sendMessage
 		// FullName:  easyndk::NDKHelper::sendMessage
 		// Access:    public 

@@ -203,24 +203,10 @@ namespace easyndk {
 			return;
 		}
 
+		Ref *param = getRefFromJson(methodParams);
 		string methodNameStr = json_string_value(methodName);
-		for (auto selector : registeredSelectors) {
-			if(selector->getName() == methodNameStr) {
-				Ref *param = getRefFromJson(methodParams);
-				calledSelectors.pushBack(NDKCalledSelector::create(selector, param));
-			}
-		}
+		callSelector(methodNameStr, param);
 
-
-		string methodKey = "EasyNDKCalledSelectorsUpdate";
-		Director::getInstance()->getScheduler()->schedule([&](float delta) {
-			if(calledSelectors.size() > 0) {
-				for (auto selector : calledSelectors) {
-					selector->executeCallback();
-				}
-				calledSelectors.clear();
-			}
-		}, this, 0, 0, 0, false, methodKey);
 
 	}
 
@@ -343,6 +329,25 @@ namespace easyndk {
 	void NDKHelper::addMock( const string &methodName, const std::function<void(Ref *)> &func )
 	{
 		registeredMocks.pushBack(NDKMock::create(methodName, func));
+	}
+
+	void NDKHelper::callSelector( const string &methodName, Ref * param )
+	{
+		for (auto selector : registeredSelectors) {
+			if(selector->getName() == methodName) {
+				calledSelectors.pushBack(NDKCalledSelector::create(selector, param));
+			}
+		}
+
+		string methodKey = "EasyNDKCalledSelectorsUpdate";
+		Director::getInstance()->getScheduler()->schedule([&](float delta) {
+			if(calledSelectors.size() > 0) {
+				for (auto selector : calledSelectors) {
+					selector->executeCallback();
+				}
+				calledSelectors.clear();
+			}
+		}, this, 0, 0, 0, false, methodKey);
 	}
 
 }
