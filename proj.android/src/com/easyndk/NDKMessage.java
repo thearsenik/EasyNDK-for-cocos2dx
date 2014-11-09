@@ -6,7 +6,7 @@
 //
 //
 
-package com.easyndk.classes;
+package com.easyndk;
 
 import java.lang.reflect.Method;
 

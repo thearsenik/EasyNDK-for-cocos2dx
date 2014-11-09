@@ -1,4 +1,4 @@
-package com.easyndk.classes;
+package com.easyndk;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,14 +14,14 @@ public class AndroidNDKHelper
 	private static Object callHandler = null;
 	private static Handler NDKHelperHandler = null;
 	
-	private static native void CPPNativeCallHandler(String json);
+	private static native void cppNativeCallHandler(String json);
 	private static String __CALLED_METHOD__ = "calling_method_name";
 	private static String __CALLED_METHOD_PARAMS__ = "calling_method_params";
-	private final static int __MSG_FROM_CPP__ = 5; 
+	private final static int __MSG_FROM_CPP__ = 1995; 
 	
-	public static void SetNDKReciever(Object callReciever)
+	public static void setNDKReceiver(Object callReceiver)
 	{
-		callHandler = callReciever;
+		callHandler = callReceiver;
 		NDKHelperHandler = new Handler()
 		{
         	public void handleMessage(Message msg)
@@ -55,14 +55,14 @@ public class AndroidNDKHelper
         };
 	}
 	
-	public static void SendMessageWithParameters(String methodToCall, JSONObject paramList)
+	public static void sendMessageWithParameters(String methodToCall, JSONObject paramList)
 	{
 		JSONObject obj = new JSONObject();
 		try
 		{
 			obj.put(__CALLED_METHOD__, methodToCall);
 			obj.put(__CALLED_METHOD_PARAMS__, paramList);
-			CPPNativeCallHandler(obj.toString());
+			cppNativeCallHandler(obj.toString());
 		}
 		catch (Exception e)
 		{
@@ -70,7 +70,7 @@ public class AndroidNDKHelper
 		}
 	}
 	
-	public static void RecieveCppMessage(String json)
+	public static void receiveCppMessage(String json)
 	{
 		if (json != null)
 		{
